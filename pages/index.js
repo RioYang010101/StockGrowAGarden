@@ -9,13 +9,12 @@ export default function Home() {
       const res = await fetch('https://rioo-project-web.vercel.app/stock/grow');
       const json = await res.json();
       
-      if (json && json.data) {
+      if (json && json.status) {
         const filtered = [];
 
-        // Ambil hanya seeds, gear, eggs
-        if (Array.isArray(json.data.seeds)) filtered.push(...json.data.seeds);
-        if (Array.isArray(json.data.gear)) filtered.push(...json.data.gear);
-        if (Array.isArray(json.data.eggs)) filtered.push(...json.data.eggs);
+        if (Array.isArray(json.seeds)) filtered.push(...json.seeds);
+        if (Array.isArray(json.gears)) filtered.push(...json.gears);
+        if (Array.isArray(json.eggs)) filtered.push(...json.eggs);
 
         setStok(filtered);
       }
@@ -33,29 +32,41 @@ export default function Home() {
   }, []);
 
   return (
-    <div style={{ fontFamily: 'sans-serif', padding: '20px' }}>
+    <div style={{
+      fontFamily: 'sans-serif',
+      padding: '20px',
+      backgroundColor: '#000',
+      color: '#fff',
+      minHeight: '100vh'
+    }}>
       <h1>🌱 Info Stok Grow A Garden</h1>
       {loading ? (
         <p>Memuat stok...</p>
       ) : (
-        <table border="1" cellPadding="8" style={{ borderCollapse: 'collapse', marginTop: '20px' }}>
+        <table border="1" cellPadding="8" style={{
+          borderCollapse: 'collapse',
+          marginTop: '20px',
+          width: '100%',
+          backgroundColor: '#111',
+          borderColor: '#444'
+        }}>
           <thead>
-            <tr>
+            <tr style={{ backgroundColor: '#222' }}>
               <th>Item</th>
               <th>Stok</th>
             </tr>
           </thead>
           <tbody>
             {stok.map((item, i) => (
-              <tr key={i}>
-                <td>{item.emoji ? item.emoji + ' ' : ''}{item.name}</td>
-                <td>{item.stock}</td>
+              <tr key={i} style={{ backgroundColor: i % 2 === 0 ? '#111' : '#1a1a1a' }}>
+                <td>{item.name}</td>
+                <td>{item.value}</td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
-      <p style={{ marginTop: '20px', fontSize: '12px', color: '#666' }}>
+      <p style={{ marginTop: '20px', fontSize: '12px', color: '#888' }}>
         Auto refresh setiap 30 detik
       </p>
     </div>
